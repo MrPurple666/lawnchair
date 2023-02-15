@@ -48,7 +48,8 @@ class LawnchairBugReporter(private val context: Context) {
     private fun removeDismissedLogs() {
         val activeIds = notificationManager.activeNotifications
             .mapTo(mutableSetOf()) { String.format("%x", it.id) }
-        (logsFolder.listFiles() as Array<File>)
+        logsFolder.listFiles().orEmpty()
+            .asSequence()
             .filter { it.name !in activeIds }
             .forEach { it.deleteRecursively() }
     }
@@ -58,7 +59,7 @@ class LawnchairBugReporter(private val context: Context) {
             .generateBugReport() ?: return
 
         val notifications = notificationManager.activeNotifications
-        val hasNotification = notifications.any { it.id == bugReport.notificationId }
+        val hasNotification = notifications.any { it.id == bugReport.id }
         if (hasNotification || notifications.size > 3) {
             return
         }

@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import app.lawnchair.font.FontCache
 import app.lawnchair.gestures.config.GestureHandlerConfig
+import app.lawnchair.hotseat.HotseatMode
 import app.lawnchair.icons.CustomAdaptiveIconDrawable
 import app.lawnchair.icons.shape.IconShape
 import app.lawnchair.icons.shape.IconShapeManager
@@ -52,7 +53,7 @@ import kotlinx.serialization.json.Json
 import app.lawnchair.preferences.PreferenceManager as LawnchairPreferenceManager
 import com.android.launcher3.graphics.IconShape as L3IconShape
 
-class PreferenceManager2(private val context: Context) : PreferenceManager {
+class PreferenceManager2 private constructor(private val context: Context) : PreferenceManager {
 
     private val scope = MainScope()
     private val resourceProvider = DynamicResource.provider(context)
@@ -76,23 +77,25 @@ class PreferenceManager2(private val context: Context) : PreferenceManager {
         defaultValue = context.resources.getBoolean(R.bool.config_default_dark_status_bar),
     )
 
-    val hotseatQsb = preference(
-        key = booleanPreferencesKey(name = "dock_search_bar"),
-        defaultValue = context.resources.getBoolean(R.bool.config_default_dock_search_bar),
+    val hotseatMode = preference(
+        key = stringPreferencesKey("hotseat_mode"),
+        defaultValue = HotseatMode.fromString(context.getString(R.string.config_default_hotseat_mode)),
+        parse = { HotseatMode.fromString(it) },
+        save = { it.toString() },
         onSet = { reloadHelper.restart() },
     )
 
     val iconShape = preference(
         key = stringPreferencesKey(name = "icon_shape"),
-        defaultValue = IconShape.fromString(context.getString(R.string.config_default_icon_shape)) ?: IconShape.Circle,
-        parse = { IconShape.fromString(it) ?: IconShapeManager.getSystemIconShape(context) },
+        defaultValue = IconShape.fromString(value = context.getString(R.string.config_default_icon_shape), context = context) ?: IconShape.Circle,
+        parse = { IconShape.fromString(value = it, context = context) ?: IconShapeManager.getSystemIconShape(context) },
         save = { it.toString() },
     )
 
     val customIconShape = preference(
         key = stringPreferencesKey(name = "custom_icon_shape"),
         defaultValue = null,
-        parse = { IconShape.fromString(it) ?: IconShapeManager.getSystemIconShape(context) },
+        parse = { IconShape.fromString(value = it, context = context) ?: IconShapeManager.getSystemIconShape(context) },
         save = { it.toString() },
         onSet = { it?.let(iconShape::setBlocking) },
     )
@@ -196,6 +199,12 @@ class PreferenceManager2(private val context: Context) : PreferenceManager {
             onSet = { reloadHelper.reloadGrid() },
     )
 
+    val showSystemSettingsEntryOnPopUp = preference(
+        key = booleanPreferencesKey(name = "show_system_settings_entry_on_popup"),
+        defaultValue = context.resources.getBoolean(R.bool.config_default_show_system_settings_entry_on_popup),
+        onSet = { reloadHelper.reloadGrid() },
+    )
+
     val hideAppDrawerSearchBar = preference(
         key = booleanPreferencesKey(name = "hide_app_drawer_search_bar"),
         defaultValue = context.resources.getBoolean(R.bool.config_default_hide_app_drawer_search_bar),
@@ -294,6 +303,11 @@ class PreferenceManager2(private val context: Context) : PreferenceManager {
     val enableFuzzySearch = preference(
         key = booleanPreferencesKey(name = "enable_fuzzy_search"),
         defaultValue = context.resources.getBoolean(R.bool.config_default_enable_fuzzy_search),
+    )
+
+    val maxSearchResultCount = preference(
+        key = intPreferencesKey(name = "max_search_result_count"),
+        defaultValue = resourceProvider.getInt(R.dimen.config_default_search_max_result_count),
     )
 
     val enableSmartspace = preference(

@@ -15,7 +15,7 @@ pluginManagement {
 
 // https://docs.gradle.com/enterprise/gradle-plugin/
 plugins {
-    id "com.gradle.enterprise" version "3.11.4"
+    id "com.gradle.enterprise" version "3.12.3"
 }
 
 gradleEnterprise {
@@ -35,6 +35,7 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include ':iconloaderlib'
@@ -43,8 +44,8 @@ project(':iconloaderlib').projectDir = new File(rootDir, 'platform_frameworks_li
 include ':searchuilib'
 project(':searchuilib').projectDir = new File(rootDir, 'platform_frameworks_libs_systemui/searchuilib')
 
-include ':SystemUIShared'
-include ':CompatLib'
-include ':CompatLibVR'
-include ':CompatLibVS'
+include ':systemUIShared'
+include ':compatLib'
+include ':compatLibVR'
+include ':compatLibVS'
 include ':hidden-api'

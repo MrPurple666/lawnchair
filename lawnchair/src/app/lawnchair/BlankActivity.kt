@@ -15,11 +15,12 @@ import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import app.lawnchair.ui.preferences.components.SystemUi
 import app.lawnchair.ui.theme.LawnchairTheme
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class BlankActivity : AppCompatActivity() {
 
@@ -113,12 +114,12 @@ class BlankActivity : AppCompatActivity() {
             dialogTitle: String, dialogMessage: String,
             positiveButton: String
         ) {
-            start(activity, targetIntent, Bundle().apply {
-                putParcelable("intent", targetIntent)
-                putString("dialogTitle", dialogTitle)
-                putString("dialogMessage", dialogMessage)
-                putString("positiveButton", positiveButton)
-            })
+            start(activity, targetIntent, bundleOf(
+                "intent" to targetIntent,
+                "dialogTitle" to dialogTitle,
+                "dialogMessage" to dialogMessage,
+                "positiveButton" to positiveButton,
+            ))
         }
 
         suspend fun startBlankActivityForResult(activity: Activity, targetIntent: Intent): ActivityResult {
@@ -126,12 +127,14 @@ class BlankActivity : AppCompatActivity() {
         }
 
         private suspend fun start(activity: Activity, targetIntent: Intent, extras: Bundle): ActivityResult {
-            return suspendCoroutine { continuation ->
+            return suspendCancellableCoroutine { continuation ->
                 val intent = Intent(activity, BlankActivity::class.java)
-                intent.putExtras(extras)
-                intent.putExtra("intent", targetIntent)
+                    .putExtras(extras)
+                    .putExtra("intent", targetIntent)
                 val resultReceiver = createResultReceiver {
-                    continuation.resume(it)
+                    if (continuation.isActive) {
+                        continuation.resume(it)
+                    }
                 }
                 activity.startActivity(intent.putExtra("callback", resultReceiver))
             }

@@ -55,11 +55,12 @@ class FontCache private constructor(private val context: Context) {
     private val customFontsDir = TTFFont.getFontsDir(context)
     val customFonts = customFontsDir.subscribeFiles()
         .map { files ->
-            files
+            files.asSequence()
                 .sortedByDescending { it.lastModified() }
                 .map { TTFFont(context, it) }
                 .filter { it.isAvailable }
                 .map { Family(it) }
+                .toList()
         }
 
     val uiRegular = ResourceFont(context, R.font.inter_regular, "Inter")
@@ -124,7 +125,7 @@ class FontCache private constructor(private val context: Context) {
         val sortedVariants by lazy { variants.values.sortedBy { it.familySorter } }
     }
 
-    class TypefaceFamily(val variants: Map<String, Typeface?>) {
+    class TypefaceFamily(private val variants: Map<String, Typeface?>) {
 
         val default = variants.getOrElse("regular") { variants.values.firstOrNull() }
     }
@@ -159,9 +160,10 @@ class FontCache private constructor(private val context: Context) {
             fun fromJsonString(context: Context, jsonString: String): Font {
                 val obj = JSONObject(jsonString)
                 val className = obj.getString(KEY_CLASS_NAME)
-                val clazz = Class.forName(className)
-                val constructor = clazz.getMethod("fromJson", Context::class.java, JSONObject::class.java)
-                return constructor.invoke(null, context, obj) as Font
+                return Class.forName(className)
+                    .getMethod("fromJson", Context::class.java, JSONObject::class.java)
+                    .apply { isAccessible = true }
+                    .invoke(null, context, obj) as Font
             }
         }
     }

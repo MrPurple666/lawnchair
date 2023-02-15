@@ -16,6 +16,7 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- PreferenceDashboard -->
+    <string name="set_default_launcher_tip">Tap this card to set Lawnchair as your default launcher.</string>
     <string name="settings">সেটিংস</string>
     <string name="general_label">সাধারণ</string>
     <string name="general_description">বিজ্ঞাপন বিন্দু, প্রতীক গুচ্ছ</string>
@@ -104,6 +105,7 @@
     <!-- IconPackPreferences -->
     <!-- <string name="icon_style" /> -->
     <string name="icon_pack">আইকন প্যাক</string>
+    <string name="themed_icon_pack">Themed Icon Source</string>
     <string name="system_icons">সিস্টেম আইকনস</string>
     <string name="themed_icon_title">আবহ অনুযায়ী প্রতীক</string>
     <string name="themed_icons_off_label">Off</string>
@@ -178,8 +180,10 @@
     <string name="home_screen_lock_description">Prevents changes to the home screen layout.</string>
     <string name="home_screen_unlock">Unlock Home Screen</string>
     <!-- used in popup menu-->
-    <string name="home_screen_lock_toggle_from_home_popup">Show Lock Button in Pop-Up</string>
     <string name="home_screen_locked">Home Screen is locked.</string>
+    <string name="popup_menu">Pop-up Menu</string>
+    <string name="home_screen_lock_toggle_from_home_popup">Show Lock Button</string>
+    <string name="show_system_settings_entry">Show System Settings Entry</string>
     <string name="status_bar_label">স্ট্যাটাস বার</string>
     <string name="show_status_bar">স্ট্যাটাস বার দেখান</string>
     <string name="dark_status_bar_label">কালো স্ট্যাটাস বার</string>
@@ -236,8 +240,11 @@
     <string name="smartspace_mode_google_search">Google Search</string>
     <!-- DockPreferences -->
     <!-- <string name="dock_label" /> -->
+    <string name="hotseat_mode_label">Search Bar Widget</string>
+    <string name="hotseat_mode_disabled">Disabled</string>
+    <string name="hotseat_mode_lawnchair">Lawnchair</string>
+    <string name="hotseat_mode_google_search">Google Search Bar</string>
     <string name="search_bar_label">সার্চ বার</string>
-    <string name="hotseat_qsb_label">সার্চ বার দেখান</string>
     <string name="corner_radius_label">কোণের ব্যাসার্ধ</string>
     <string name="apply_accent_color_label">অ্যাকসেন্ট রং ব্যবহার করুন</string>
     <string name="search_provider">সার্চ প্রদানকারী</string>
@@ -262,6 +269,7 @@
     <string name="pref_search_auto_show_keyboard">স্বয়ংক্রিয়ভাবে কীবোর্ড দেখান</string>
     <string name="fuzzy_search_title">ফাজি সার্চ</string>
     <string name="fuzzy_search_desc">অ্যাপ্লিকেশন সার্চের জন্য আনুমানিক মিল.</string>
+    <string name="max_search_result_count_title">Max Search Result Count</string>
     <!-- <string name="grid" /> -->
     <string name="app_drawer_columns">অ্যাপ ড্রয়ারের কলাম</string>
     <string name="row_height_label">সারির উচ্চতা</string>
@@ -353,7 +361,6 @@
     <string name="label">নাম</string>
     <string name="hide_from_drawer">অ্যাপ ড্রয়ার থেকে লুকান</string>
     <string name="suggestion_pref_screen_title">পরামর্শ</string>
-    <string name="n_percent">%1$d%%</string>
     <!-- Bug reporting -->
     <string name="lawnchair_bug_report">Lawnchair বাগ রিপোর্ট</string>
     <string name="crash_report_notif_title">%1$s সমস্যা হয়েছে</string>
@@ -396,4 +403,5 @@
     <string name="invalid_backup_file">Invalid backup file.</string>
     <string name="x_by_y">%1$d × %2$d</string>
     <string name="x_and_y">%s &amp; %s</string>
+    <string name="system_settings">System Settings</string>
 </resources>
